@@ -3,11 +3,14 @@ package com.github.skare69.nomster.rest;
 import com.github.skare69.nomster.entity.Suggestion;
 import com.github.skare69.nomster.entity.Attendee;
 import com.github.skare69.nomster.service.SuggestionService;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +44,15 @@ public class RestService
         suggestion.setDescription("Wanna eat some sandwiches?");
         suggestion.setLatitude(40.722196f);
         suggestion.setLongitude(-73.987429f);
+
+        LocalDate date = LocalDate.now();
+        if (date.getDayOfWeek() < DateTimeConstants.MONDAY && date.getDayOfWeek() > DateTimeConstants.FRIDAY)
+        {
+            date = date.plusDays(2);
+        }
+        Calendar newDate = Calendar.getInstance();
+        newDate.setTime(date.toDateMidnight().toDate());
+        suggestion.setDate(newDate);
         return suggestion;
     }
 
